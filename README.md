@@ -6,7 +6,7 @@ PART A
 
 "strings -t x target_Vansh18012008" Extracts all printable strings and their hex offsets. This was used to identify the hardcoded password.
 
-"./target_Vansh18012008 < payload.txt" Runs the executable using the discovered password stored in payload.txt.
+"./target_Vansh18012008 < payload" Runs the executable using the discovered password stored in payload.
 
 
 PART B
