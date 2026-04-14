@@ -1,4 +1,4 @@
-PARt A
+PART A
 
 "file target_Vansh18012008" Checks the file type to confirm it is a RISC-V 64-bit executable.
 
