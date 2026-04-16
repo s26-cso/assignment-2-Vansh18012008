@@ -12,7 +12,7 @@ int main()
     {
         // build library name: lib<op>.so
         char libname[20];
-        sprintf(libname,"lib%s.so",op);
+        sprintf(libname,"./lib%s.so",op);
 
         // load library
         void *handle = dlopen(libname,RTLD_LAZY);
