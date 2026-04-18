@@ -21,19 +21,21 @@ main:
     addi s1, s1, -1             #decrementing 1 to get the count
     
     slli t0, s1, 3              #Multiply n by 8 (each integer/pointer is 8 bytes)
-    sub sp, sp, t0              #moving sp to make room for arr
+    li t1, 3
+    mul t0, t0, t1              # total space = 3*n*8
+    sub sp, sp, t0              # allocate all memory together
+
     mv s4, sp                   #s4 is the base address of arr
-    sub sp, sp, t0              #making room for result array
-    mv s5, sp                   #s5 is base address of result
-    sub sp, sp, t0              #making space for our stack
-    mv s6, sp                   #s6 is the base address of stack
+    slli t1, s1, 3
+    add s5, s4, t1              #s5 is base address of result
+    add s6, s5, t1              #s6 is the base address of stack
     
     li s3, 0                    #setting loop counter to 0
 parse_loop:
     beq s3, s1, process_init    #if i==n then done
     slli t0, s3, 3              #offset
     add t1, s2, t0              #address of the string pointer pointer to an array of strings
-    ld a0, 8(t1)                
+    ld a0, 8(t1)                # FIX: argv[i+1]
     call atoi                   #calling C library function sting to int
     
     slli t0, s3, 3              #offset
@@ -66,9 +68,12 @@ while_stack:
     add t1, s4, t1
     ld t4, 0(t1)                # t4 = the IQ of the student at that index
     
-    bgt t4, t2, stack_not_empty # If IQ on stack > current IQ, we found the next greatest element
-    addi s7, s7, -1             # Otherwise, pop the stack
-    j while_stack               # Check next element in stack
+    ble t4, t2, pop_stack       # FIX: must pop when <=
+    j stack_not_empty
+
+pop_stack:
+    addi s7, s7, -1             # pop
+    j while_stack
 
 stack_empty:
     li t5, -1                   # No greater element found, use -1
@@ -110,6 +115,7 @@ print_loop:
     beq s3, t0, skip_space      # if last don't print a space 
     la a0, space                #load ""string
     call printf
+
 skip_space:
     addi s3, s3, 1              #i++
     j print_loop
